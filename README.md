@@ -1,5 +1,7 @@
 # 物聯網實習教學範例（ESP8266 / ESP32 / Arduino）
 
+🔗 **教學網頁：https://webhandyman996.github.io/iot-lab-demo/**
+
 物聯網實習課程的教學範例程式，涵蓋 ESP8266、ESP32、Arduino Mega2560 等常見物聯網開發板的基礎操作。
 
 ## `ESP2880Code/`：ESP8266 基礎測試
