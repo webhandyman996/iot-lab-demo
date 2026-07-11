@@ -30,6 +30,10 @@ ESP8266 基礎測試程式。
 
 課堂練習當下的程式片段存檔。
 
+## `Dashboard/`：儀表板版面設定
+
+`factory_monitor_dark.json` 為 Looker Studio（原 Google Data Studio）儀表板的版面設定範例，示範感測器資料串到雲端儀表板的最後一步呈現方式；完整的「感測器→MCU→Google表單→試算表→儀表板」資料串接邏輯，詳見教學網頁底部說明。
+
 ## 環境需求
 
 Arduino IDE，需安裝對應開發板的板卡管理員（ESP8266/ESP32）與函式庫（U8g2、TroykaDHT 等，依各程式內 `#include` 為準）。

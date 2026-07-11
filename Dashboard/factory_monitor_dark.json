@@ -1,0 +1,140 @@
+{
+  "report": {
+    "name": "智慧工廠冷卻水塔監控儀表板",
+    "theme": {
+      "canvasBackgroundColor": "#0B1E2E",
+      "bodyBackgroundColor": "#0B1E2E",
+      "textColor": "#FFFFFF",
+      "accentColor": "#4E9CD4",
+      "chartColors": ["#4E9CD4", "#F4B400", "#DB4437", "#0F9D58", "#AB47BC", "#FF7043"]
+    },
+    "controls": [
+      {
+        "type": "DATE_RANGE_CONTROL",
+        "name": "日期範圍",
+        "position": {"x":20,"y":20,"width":280,"height":40},
+        "data": {"field": "時間", "type": "DIMENSION"}
+      },
+      {
+        "type": "FILTER_CONTROL",
+        "name": "設備選擇",
+        "position": {"x":320,"y":20,"width":180,"height":40},
+        "data": {"field": "設備名稱", "type": "DIMENSION"}
+      },
+      {
+        "type": "FILTER_CONTROL",
+        "name": "狀態篩選",
+        "position": {"x":520,"y":20,"width":150,"height":40},
+        "data": {"field": "狀態", "type": "DIMENSION"}
+      },
+      {
+        "type": "FILTER_CONTROL",
+        "name": "操作人員",
+        "position": {"x":690,"y":20,"width":150,"height":40},
+        "data": {"field": "操作人員", "type": "DIMENSION"}
+      }
+    ],
+    "charts": [
+      {
+        "type": "LINE_CHART",
+        "name": "壓力趨勢圖",
+        "position": {"x":20,"y":80,"width":900,"height":280},
+        "data": {
+          "dimension": {"field": "時間", "type": "DIMENSION"},
+          "series": {"field": "設備名稱", "type": "DIMENSION"},
+          "metric": {"field": "壓力 (kPa)", "type": "METRIC", "aggregation": "AVG"}
+        },
+        "style": {
+          "backgroundColor": "#0B1E2E",
+          "titleColor": "#FFFFFF",
+          "axisColor": "#CCCCCC",
+          "gridLineColor": "#1E3A4A",
+          "smoothLines": true,
+          "showDataPoints": false
+        }
+      },
+      {
+        "type": "LINE_CHART",
+        "name": "溫度變化圖",
+        "position": {"x":20,"y":380,"width":900,"height":280},
+        "data": {
+          "dimension": {"field": "時間", "type": "DIMENSION"},
+          "series": {"field": "設備名稱", "type": "DIMENSION"},
+          "metric": {"field": "溫度 (°C)", "type": "METRIC", "aggregation": "AVG"}
+        },
+        "style": {
+          "backgroundColor": "#0B1E2E",
+          "titleColor": "#FFFFFF",
+          "axisColor": "#CCCCCC",
+          "gridLineColor": "#1E3A4A",
+          "smoothLines": true
+        }
+      },
+      {
+        "type": "COMBO_CHART",
+        "name": "流量 vs 電流",
+        "position": {"x":20,"y":680,"width":900,"height":280},
+        "data": {
+          "dimension": {"field": "時間", "type": "DIMENSION"},
+          "series": {"field": "設備名稱", "type": "DIMENSION"},
+          "metric": [
+            {"field": "流量 (L/min)", "type": "METRIC", "aggregation": "AVG"},
+            {"field": "電流 (A)", "type": "METRIC", "aggregation": "AVG"}
+          ]
+        },
+        "style": {
+          "backgroundColor": "#0B1E2E",
+          "titleColor": "#FFFFFF",
+          "axisColor": "#CCCCCC",
+          "gridLineColor": "#1E3A4A"
+        }
+      },
+      {
+        "type": "PIE_CHART",
+        "name": "狀態分佈",
+        "position": {"x":960,"y":80,"width":350,"height":280},
+        "data": {
+          "dimension": {"field": "狀態", "type": "DIMENSION"},
+          "metric": {"field": "設備名稱", "type": "METRIC", "aggregation": "COUNT"}
+        },
+        "style": {
+          "backgroundColor": "#0B1E2E",
+          "titleColor": "#FFFFFF"
+        }
+      },
+      {
+        "type": "BAR_CHART",
+        "name": "警報代碼排行",
+        "position": {"x":960,"y":380,"width":350,"height":280},
+        "data": {
+          "dimension": {"field": "警報代碼", "type": "DIMENSION"},
+          "metric": {"field": "警報代碼", "type": "METRIC", "aggregation": "COUNT"},
+          "limit": 10
+        },
+        "style": {
+          "backgroundColor": "#0B1E2E",
+          "titleColor": "#FFFFFF",
+          "axisColor": "#CCCCCC"
+        }
+      },
+      {
+        "type": "BAR_CHART",
+        "name": "操作人員工作量",
+        "position": {"x":960,"y":680,"width":350,"height":280},
+        "data": {
+          "dimension": {"field": "操作人員", "type": "DIMENSION"},
+          "metric": {"field": "設備名稱", "type": "METRIC", "aggregation": "COUNT"}
+        },
+        "style": {
+          "backgroundColor": "#0B1E2E",
+          "titleColor": "#FFFFFF",
+          "axisColor": "#CCCCCC"
+        }
+      }
+    ],
+    "footer": {
+      "text": "崑山科技大學 · 智慧工廠監控系統 · {{CURRENT_DATE}}",
+      "style": {"color": "#AAAAAA","fontSize": 10}
+    }
+  }
+}

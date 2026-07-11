@@ -105,6 +105,73 @@
     }
     .footer { margin-top: 2.5rem; font-size: 0.85rem; color: #7b6f65; }
     .footer a { color: var(--accent-2); }
+    .pipeline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 0.4rem;
+      margin: 1rem 0 1.5rem;
+    }
+    .pipeline-stage {
+      flex: 1 1 160px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      text-align: center;
+    }
+    .pipeline-stage .icon { font-size: 1.6rem; }
+    .pipeline-stage h4 { margin: 0.4rem 0 0.3rem; font-size: 0.95rem; color: var(--accent-2); }
+    .pipeline-stage p { margin: 0; font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+    .pipeline-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: var(--accent);
+      flex: 0 0 auto;
+      padding: 0 0.2rem;
+    }
+    @media (max-width: 720px) {
+      .pipeline { flex-direction: column; }
+      .pipeline-arrow { transform: rotate(90deg); padding: 0.2rem 0; }
+    }
+    .steps {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .steps ol { margin: 0; padding-left: 1.2rem; }
+    .steps li { margin-bottom: 0.8rem; line-height: 1.6; font-size: 0.92rem; }
+    .steps li:last-child { margin-bottom: 0; }
+    .steps li strong { color: var(--accent-2); }
+    .steps code {
+      background: #f6f1e7;
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.85em;
+    }
+    .compare-table-wrap {
+      overflow-x: auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+    }
+    table.compare-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    table.compare-table th, table.compare-table td {
+      text-align: left;
+      padding: 0.7rem 0.9rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    table.compare-table th { background: #f6f1e7; color: var(--accent-2); }
+    table.compare-table tr:last-child td { border-bottom: none; }
   </style>
 </head>
 <body>
@@ -113,7 +180,7 @@
       <span class="badge">物聯網</span>
       <h1>物聯網實習教學範例（IoT Lab Demo）</h1>
       <p>這些是 Arduino / ESP8266 / ESP32 硬體程式，需要實際開發板與感測器才能執行，本頁提供程式說明與原始碼連結，供學生對照課堂使用的硬體閱讀與練習。</p>
-      <nav class="nav"><a href="#wifi-basics">WiFi 基礎測試</a><a href="#board2web">開發板連網範例</a><a href="#oled-sensor">OLED 顯示與感測器整合</a><a href="#practice">課堂練習片段</a></nav>
+      <nav class="nav"><a href="#wifi-basics">WiFi 基礎測試</a><a href="#board2web">開發板連網範例</a><a href="#oled-sensor">OLED 顯示與感測器整合</a><a href="#practice">課堂練習片段</a><a href="#pipeline">感測器到儀表板架構</a></nav>
     </section>
     
     <section id="wifi-basics">
@@ -219,6 +286,69 @@
       </div>
     </section>
     <div class="hint">程式中的 WiFi 帳密與 API 金鑰皆已改為佔位符（如 YOUR_WIFI_SSID），請依自己的環境自行填入，不要把真實密碼上傳到公開的repo。</div>
+
+    <section id="pipeline">
+      <h2>資料串接架構：從感測器到雲端儀表板（Sensor to Dashboard Pipeline）</h2>
+      <p class="section-desc">這門課示範的完整資料流程是：感測器量到數值 → 開發板整理並連網送出 → Google表單自動收集 → 試算表即時累積資料 → Looker Studio 儀表板自動畫圖顯示。整條路徑完全不用自己架伺服器。</p>
+
+      <div class="pipeline">
+        <div class="pipeline-stage">
+          <div class="icon">🌡️</div>
+          <h4>感測器<br>Sensor</h4>
+          <p>DHT11/DHT22等量測溫度、濕度等物理量</p>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-stage">
+          <div class="icon">🔌</div>
+          <h4>MCU<br>開發板</h4>
+          <p>Mega2560/ESP32讀取數值，連上WiFi</p>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-stage">
+          <div class="icon">📝</div>
+          <h4>Google表單<br>Google Form</h4>
+          <p>接收裝置送來的資料，當作一筆回覆</p>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-stage">
+          <div class="icon">📊</div>
+          <h4>Google試算表<br>Sheets</h4>
+          <p>表單回覆自動變成一列資料，即時累積</p>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-stage">
+          <div class="icon">📈</div>
+          <h4>Looker Studio<br>儀表板</h4>
+          <p>連接試算表為資料來源，圖表自動更新</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <ol>
+          <li><strong>感測器 → MCU：</strong>感測器透過腳位（GPIO）或 I2C 匯流排把量到的原始數值傳給開發板。如果主控板本身沒有WiFi功能（例如 Arduino Mega2560），會再透過序列埠（UART）把資料交給旁邊負責連網的 ESP32/ESP8266。</li>
+          <li><strong>MCU → Google表單：</strong>裝置連上WiFi後，<em>不需要真的打開表單網頁填寫</em>，而是直接對表單的固定網址（<code>.../formResponse</code>）發送 HTTP POST 請求，把每個感測器數值放進對應的 <code>entry.XXXXXXX</code> 參數裡，效果等同於「自動幫你把表單填好送出」。這個 entry 代碼可以在表單編輯畫面按「預覽」，再按右鍵「檢查」原始碼，找到每個問題輸入框的 <code>name="entry.XXXXXXX"</code> 屬性取得。</li>
+          <li><strong>Google表單 → 試算表：</strong>Google表單本身就會自動把每一筆送出的回覆存成試算表的一列，等於免費幫你架好一個會即時更新的資料庫，完全不用自己寫後端程式或資料庫。</li>
+          <li><strong>試算表 → Looker Studio：</strong>把這份試算表設定成 Looker Studio（原 Google Data Studio）的資料來源，畫面上的折線圖、圓餅圖等會自動抓最新的資料列重新繪製，就變成一個會自動更新的監控儀表板——本 repo 裡的 <a href="https://github.com/webhandyman996/iot-lab-demo/blob/master/Dashboard/factory_monitor_dark.json" target="_blank" rel="noopener"><code>Dashboard/factory_monitor_dark.json</code></a> 就是這種儀表板的版面設定範例（智慧工廠冷卻水塔監控主題）。</li>
+        </ol>
+      </div>
+
+      <h3 style="margin:1.5rem 0 0.6rem;font-size:1.05rem;color:var(--accent-2);">跟 Board2Web 範例的做法比較</h3>
+      <div class="compare-table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr><th></th><th>Google表單方案</th><th>本repo Board2Web 方案（Apps Script）</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>資料接收端</td><td>Google表單（免寫程式）</td><td>自己寫的 Google Apps Script Web App</td></tr>
+            <tr><td>驗證/安全性</td><td>無內建驗證，任何人都能送資料</td><td>可自訂 API_KEY 驗證，較安全</td></tr>
+            <tr><td>資料處理彈性</td><td>低，只能收資料</td><td>高，送出前可先做邏輯判斷、格式轉換</td></tr>
+            <tr><td>建置難度</td><td>最簡單，適合快速做出能動的demo</td><td>需要寫 Apps Script 程式碼</td></tr>
+            <tr><td>最終資料去處</td><td>Google試算表</td><td>Google試算表</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="hint">兩種做法殊途同歸，最後都是把資料存進 Google試算表，再交給 Looker Studio 畫圖。差別只在「怎麼把資料送進試算表」這一段：表單免寫程式但沒有驗證，Apps Script 較安全但要多寫一點程式碼。</div>
+    </section>
     <p class="footer">Repo: <a href="https://github.com/webhandyman996/iot-lab-demo" target="_blank" rel="noopener">webhandyman996/iot-lab-demo</a></p>
   </main>
 </body>
