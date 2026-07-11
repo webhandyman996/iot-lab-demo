@@ -326,11 +326,12 @@
       <div class="steps">
         <ol>
           <li><strong>感測器 → MCU：</strong>感測器透過腳位（GPIO）或 I2C 匯流排把量到的原始數值傳給開發板。如果主控板本身沒有WiFi功能（例如 Arduino Mega2560），會再透過序列埠（UART）把資料交給旁邊負責連網的 ESP32/ESP8266。</li>
-          <li><strong>MCU → Google表單：</strong>裝置連上WiFi後，<em>不需要真的打開表單網頁填寫</em>，而是直接對表單的固定網址（<code>.../formResponse</code>）發送 HTTP POST 請求，把每個感測器數值放進對應的 <code>entry.XXXXXXX</code> 參數裡，效果等同於「自動幫你把表單填好送出」。這個 entry 代碼可以在表單編輯畫面按「預覽」，再按右鍵「檢查」原始碼，找到每個問題輸入框的 <code>name="entry.XXXXXXX"</code> 屬性取得。</li>
-          <li><strong>Google表單 → 試算表：</strong>Google表單本身就會自動把每一筆送出的回覆存成試算表的一列，等於免費幫你架好一個會即時更新的資料庫，完全不用自己寫後端程式或資料庫。</li>
-          <li><strong>試算表 → Looker Studio：</strong>把這份試算表設定成 Looker Studio（原 Google Data Studio）的資料來源，畫面上的折線圖、圓餅圖等會自動抓最新的資料列重新繪製，就變成一個會自動更新的監控儀表板——本 repo 裡的 <a href="https://github.com/webhandyman996/iot-lab-demo/blob/master/Dashboard/factory_monitor_dark.json" target="_blank" rel="noopener"><code>Dashboard/factory_monitor_dark.json</code></a> 就是這種儀表板的版面設定範例（智慧工廠冷卻水塔監控主題）。</li>
+          <li><strong>MCU → Google表單：</strong>裝置連上WiFi後，<em>不需要真的打開表單網頁填寫</em>，而是直接對表單的固定網址（<code>.../formResponse</code>）發送 HTTP POST 請求，把每個感測器數值放進對應的 <code>entry.XXXXXXX</code> 參數裡，效果等同於「自動幫你把表單填好送出」。這個 entry 代碼可以在表單編輯畫面按「預覽」，再按右鍵「檢查」原始碼，找到每個問題輸入框的 <code>name="entry.XXXXXXX"</code> 屬性取得。<br><strong>注意：</strong>Google表單只接受 HTTPS 連線，ESP8266 用 <code>WiFiClientSecure</code> 發送請求時，預設不會自動驗證憑證，需要額外設定憑證指紋（fingerprint）或呼叫 <code>setInsecure()</code> 跳過驗證，是學生最容易卡關的一步；ESP32 的 <code>HTTPClient</code> 則相對單純。</li>
+          <li><strong>Google表單 → 試算表：</strong>Google表單本身就會自動把每一筆送出的回覆存成試算表的一列，並自動加上一欄「Timestamp」記錄送出時間——這就是後續折線圖能畫出時間軸的原因，裝置端完全不用自己處理時間戳記。等於免費幫你架好一個會即時更新的資料庫，不用自己寫後端程式或資料庫。</li>
+          <li><strong>試算表 → Looker Studio：</strong>把這份試算表設定成 Looker Studio（原 Google Data Studio）的資料來源，畫面上的折線圖、圓餅圖等會抓資料來源的最新資料列重新繪製，變成監控儀表板——本 repo 裡的 <a href="https://github.com/webhandyman996/iot-lab-demo/blob/master/Dashboard/factory_monitor_dark.json" target="_blank" rel="noopener"><code>Dashboard/factory_monitor_dark.json</code></a> 就是這種儀表板的版面設定範例（智慧工廠冷卻水塔監控主題）。<br><strong>注意：</strong>Looker Studio 預設會「快取」資料（依來源類型可能快取數小時），並非資料一進試算表畫面就馬上更新；要接近即時，需要到資料來源設定把「資料新鮮度」改成「不使用快取」，或手動按重新整理。</li>
         </ol>
       </div>
+      <div class="hint">⚠️ Google表單／試算表的寫入是有配額限制的（並非設計給高頻率、每秒等級的資料寫入使用）。如果課堂多台裝置同時頻繁上傳，可能會撞到每日配額或觸發延遲，建議感測器讀取間隔抓寬鬆一點（例如幾十秒到幾分鐘一筆），不要當成工業級即時系統使用。</div>
 
       <h3 style="margin:1.5rem 0 0.6rem;font-size:1.05rem;color:var(--accent-2);">跟 Board2Web 範例的做法比較</h3>
       <div class="compare-table-wrap">
