@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>物聯網實習教學範例（IoT Lab Demo）</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --panel: #fffef9;
+      --text: #1e1b18;
+      --muted: #5a5047;
+      --accent: #d96f32;
+      --accent-2: #1f7a8c;
+      --line: #e7dccd;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, #ffe6c6 0, transparent 25%),
+        radial-gradient(circle at 85% 15%, #cde9ef 0, transparent 23%),
+        linear-gradient(180deg, #fdf8ef 0%, #f5eee2 100%);
+      min-height: 100vh;
+    }
+    .container { width: min(1100px, 92vw); margin: 0 auto; padding: 2.5rem 0 4rem; }
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 2rem;
+    }
+    h1 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.25; }
+    .hero p { margin: 1rem 0 0; color: var(--muted); font-size: 1.05rem; }
+    .badge {
+      display: inline-block;
+      margin-bottom: 0.9rem;
+      background: #fff0e4;
+      color: #9b4c1f;
+      border: 1px solid #f4d0b8;
+      border-radius: 999px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    h2 { margin: 2.4rem 0 0.4rem; font-size: clamp(1.3rem, 2.3vw, 1.7rem); }
+    .section-desc { margin: 0 0 1rem; color: var(--muted); }
+    .nav { margin-top: 1.2rem; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .nav a {
+      font-size: 0.85rem;
+      color: var(--accent-2);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.3rem 0.75rem;
+      background: #fff;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+    .card h3 { margin: 0 0 0.6rem; font-size: 1.02rem; color: var(--accent-2); }
+    .card p { margin: 0.6rem 0 0; color: var(--muted); line-height: 1.45; font-size: 0.92rem; }
+    .note {
+      font-size: 0.82rem;
+      color: #9b4c1f;
+      background: #fff0e4;
+      border-radius: 8px;
+      padding: 0.4rem 0.6rem;
+    }
+    .actions { margin-top: auto; padding-top: 0.9rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: #fff;
+    }
+    .btn-src:hover { border-color: var(--accent-2); color: var(--accent-2); }
+    .hint {
+      margin-top: 1.2rem;
+      background: #fff;
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      color: #4d4137;
+      font-size: 0.92rem;
+    }
+    .footer { margin-top: 2.5rem; font-size: 0.85rem; color: #7b6f65; }
+    .footer a { color: var(--accent-2); }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <span class="badge">物聯網</span>
+      <h1>物聯網實習教學範例（IoT Lab Demo）</h1>
+      <p>這些是 Arduino / ESP8266 / ESP32 硬體程式，需要實際開發板與感測器才能執行，本頁提供程式說明與原始碼連結，供學生對照課堂使用的硬體閱讀與練習。</p>
+      <nav class="nav"><a href="#wifi-basics">WiFi 基礎測試</a><a href="#board2web">開發板連網範例</a><a href="#oled-sensor">OLED 顯示與感測器整合</a><a href="#practice">課堂練習片段</a></nav>
+    </section>
+    
+    <section id="wifi-basics">
+      <h2>WiFi 基礎測試（WiFi Basics）</h2>
+      <p class="section-desc">確認 ESP8266/ESP32 模組能否正常開機、連上WiFi、跟主控板通訊，是後續所有連網範例的前置測試。</p>
+      <div class="grid">
+        <article class="card">
+          <h3>ESP8266 Blink</h3>
+          <p>讓 ESP8266 內建 LED 閃爍，最基礎的「Hello World」，確認開發板燒錄與基本程式能正常運作。</p>
+          <p class="note">硬體：ESP8266 開發板（如 NodeMCU）</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/ESP8266Test/Ardunio_ESP8266.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+        <article class="card">
+          <h3>連接 WPA 加密 WiFi</h3>
+          <p>示範 WiFiEsp 函式庫如何連上 WPA/WPA2 加密的 WiFi 網路，並印出取得的 IP、訊號強度等資訊。</p>
+          <p class="note">需在程式中填入自己的 WiFi SSID / 密碼</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/ESP2880Code/ConnectWPA/ConnectWPA.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+        <article class="card">
+          <h3>ESP8266 基本通訊測試</h3>
+          <p>透過 AT 指令測試 Arduino 與 ESP8266 模組之間的序列埠通訊是否正常，並讀出 ESP8266 韌體版本。</p>
+          <p class="note">硬體：Arduino + ESP8266（透過序列埠連接）</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/ESP2880Code/FixBoadRatTest/FixBoadRatTest.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+        <article class="card">
+          <h3>自動切換鮑率測試</h3>
+          <p>每 3 秒自動切換一組鮑率（9600~115200）並發送 AT 指令，用來找出 ESP8266 模組實際使用的通訊速率。</p>
+          <p class="note">硬體：Arduino + ESP8266</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/ESP2880Code/MutiBoadrateTest1/MutiBoadrateTest1.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+      </div>
+    </section>
+    <section id="board2web">
+      <h2>開發板連網範例（Board-to-Web）</h2>
+      <p class="section-desc">示範「感測器主機板（無WiFi）+ ESP32（當WiFi中繼）+ 雲端後端」的完整連網架構：主機板量測資料後，透過序列埠交給 ESP32 連網並上傳。</p>
+      <div class="grid">
+        <article class="card">
+          <h3>Mega2560 感測資料上傳</h3>
+          <p>Arduino Mega2560 讀取感測器資料，透過序列埠指令控制旁邊的 ESP32 連上 WiFi，再把資料以 HTTP POST 送到後端 API。</p>
+          <p class="note">硬體：Arduino Mega2560 + 感測器；WiFi帳密與API金鑰請自行填入 config.h</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/Board2Web/20201122-2-mega2560/20201122-2-mega2560.ino" target="_blank" rel="noopener">查看原始碼 1</a><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/Board2Web/20201122-2-mega2560/config.h" target="_blank" rel="noopener">查看原始碼 2</a></div>
+        </article>
+        <article class="card">
+          <h3>ESP32 WiFi 中繼</h3>
+          <p>ESP32 端程式，接收 Mega2560 透過序列埠傳來的 SSID/密碼指令，連上WiFi後負責實際的連網動作，是「主機板負責感測、ESP32負責連網」架構的網路端。</p>
+          <p class="note">硬體：ESP32 開發板</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/Board2Web/esp32/sketch_dec9f.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+        <article class="card">
+          <h3>Google Apps Script 後端</h3>
+          <p>搭配開發板程式的雲端後端，接收裝置以 POST 送來的溫濕度資料（需帶正確的 API_KEY 驗證），記錄到 Google 試算表。</p>
+          <p class="note">部署方式：貼到 Google Apps Script 專案，並在「指令碼屬性」設定 API_KEY</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/Board2Web/google_apps_script.gs" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+      </div>
+    </section>
+    <section id="oled-sensor">
+      <h2>OLED 顯示與感測器整合（OLED & Sensors）</h2>
+      <p class="section-desc">使用 U8g2 函式庫驅動 OLED 顯示螢幕，搭配 DHT 溫溼度感測器，從「純序列埠輸出」進階到「螢幕顯示」再到「上雲端」。</p>
+      <div class="grid">
+        <article class="card">
+          <h3>DHT 溫溼度讀取</h3>
+          <p>最基礎版本：讀取 DHT11 感測器的溫度、濕度，從序列埠監控視窗輸出文字結果。</p>
+          <p class="note">硬體：DHT11 溫濕度感測器</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/OLED_DEMO/TEMPTURE.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+        <article class="card">
+          <h3>OLED 顯示溫溼度</h3>
+          <p>在 TEMPTURE.ino 的基礎上，把讀到的溫濕度資料同時顯示在 OLED 螢幕上，示範感測器資料與顯示裝置的整合。</p>
+          <p class="note">硬體：DHT11 + SSD1306 OLED（I2C，128x64）</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/OLED_DEMO/OLED_TEMPTURE.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+        <article class="card">
+          <h3>溫溼度資料上雲端＋OLED顯示</h3>
+          <p>整合版：讀取溫溼度、透過WiFi以API金鑰驗證上傳到後端，同時在OLED螢幕即時顯示，是整個系列最完整的應用範例。</p>
+          <p class="note">硬體：DHT11 + OLED + WiFi；需自行填入 WiFi 帳密與 API_KEY</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/OLED_DEMO/Remote_OLED_TEMPTURE.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+        <article class="card">
+          <h3>天氣圖示與捲動文字（函式庫範例）</h3>
+          <p>U8g2 官方函式庫附帶的範例，展示天氣圖示（open-iconic）與文字捲動效果，可作為 OLED 進階視覺效果的參考。</p>
+          <p class="note">非教師自製，為 u8g2 函式庫官方範例（BSD授權）</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/OLED_DEMO/Weather/Weather.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+      </div>
+    </section>
+    <section id="practice">
+      <h2>課堂練習片段（Practice Snippets）</h2>
+      <p class="section-desc">課堂當下的練習存檔，內容與「開發板連網範例」類似（Mega2560 + ESP32 WiFi 中繼架構），可對照參考。</p>
+      <div class="grid">
+        <article class="card">
+          <h3>Mega2560 練習片段</h3>
+          <p>課堂練習時的 Mega2560 端程式片段，架構與「Mega2560 感測資料上傳」相近。</p>
+          <p class="note">硬體：Arduino Mega2560</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/ESP32_20251021/20251023_MAGE2560/20251023.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+        <article class="card">
+          <h3>ESP32 練習片段</h3>
+          <p>課堂練習時的 ESP32 端 WiFi 中繼程式片段，架構與「ESP32 WiFi 中繼」相近。</p>
+          <p class="note">硬體：ESP32 開發板</p>
+          <div class="actions"><a class="btn btn-src" href="https://github.com/webhandyman996/iot-lab-demo/blob/master/ESP32_20251021/20251025_ESP/sketch_oct24a/sketch_oct24a.ino" target="_blank" rel="noopener">查看原始碼</a></div>
+        </article>
+      </div>
+    </section>
+    <div class="hint">程式中的 WiFi 帳密與 API 金鑰皆已改為佔位符（如 YOUR_WIFI_SSID），請依自己的環境自行填入，不要把真實密碼上傳到公開的repo。</div>
+    <p class="footer">Repo: <a href="https://github.com/webhandyman996/iot-lab-demo" target="_blank" rel="noopener">webhandyman996/iot-lab-demo</a></p>
+  </main>
+</body>
+</html>
